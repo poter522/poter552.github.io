@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <title></title>
+  </head>
+  <body background='red'>
+    <p id="tPN">в сети: <p id="namberPeople">0</p></p>
+    <div class="conaiter">
+<div class="py-5 text-center">
+<h2>chat programm</h2>
+<p class='lead'>please write your name end start write all people</p>
+  </div>
+  <div class="row">
+    <div class="col-6">
+<h3>settep massege</h3>
+<br>
+<form id="massForm">
+  <label for="massage">name</label>
+  <input type="text" name="name" id="name" placeholder="please join your name" class="form-control">
+<br>
+  <label for="massage">massege</label>
+  <textarea name='massage' id="message" class="form-control" placeholder="write to message"></textarea>
+  <br>
+  <input type="submit" class="btn btn-danger" value="go to global">
+  </form>
+      </div>
+<h3>massage add people</h3>
+<div id="all_mess">
+<hr>
+</div>
+    </div>
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js">
+  </script>
+  <script src="/socket.io/socket.io.js">
+  </script>
+  <script>
+    $(function(){
+      this.namber = 0;
+      this.$people = $("namberPeople");
+      var socket = io.connect();
+      var $form = $("#massForm");
+      var $name = $("#name");
+      var $textarea = $("#message");
+      var $allMessages = $("#all_mess");
+
+      $form.submit(function(event){
+        event.preventDefault();
+        socket.emit('sendMess', {mess: $textarea.val(), name: $name.val()});
+$textarea.val('');
+
+      });
+
+      socket.on('addMess', function(data){
+        $allMessages.append("<div><b>" + data.name + "</b>: " + data.mess + "</div>");
+
+      });
+
+    });
+    </script>
+  </body>
+</html>
